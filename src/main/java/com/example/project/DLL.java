@@ -64,16 +64,49 @@ public class DLL<T> {
         else
             current = current.next;
     }
-    public void removeBetween(T e1, T e2) {
-        throw new UnsupportedOperationException("Not supported yet.");
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // Write the method removeBetween, member of the class DoubleLinkedList. The method
-        // takes two elements e1 and e2, and removes all the elements between the two elements
-        // (e1 and e2 not included). If e1 or e2 or both doesn’t exist, no element will be removed. You can assume the elements to be unique, e1 comes before e2, and that
-        // e1 ̸= e2. Current is moved to head if the removal is successful. Do not call any
-        // methods and do not use any auxiliary data structures. The method signature
-        // is: public void removeBetween(T e1, T e2).
-        // Example 3.1. Given the list: A ↔ B ↔ C ↔ D ↔ E ↔ F, removeBetween(’B’,
-        // ’E’) results in: A ↔ B ↔ E ↔ F.
+  public void removeBetween(T e1, T e2) {
+    // Step 1: Find the node with element e1
+    Node<T> current = head;
+    while (current != null && !current.data.equals(e1)) {
+        current = current.next;
+    }
+
+    // If e1 is not found, or if e2 does not exist after e1, exit
+    if (current == null) {
+        return;
+    }
+
+    // Step 2: Set start to e1's node and move current to the next node
+    Node<T> start = current;
+    current = current.next;
+
+    // Traverse until we find e2 or reach the end of the list
+    while (current != null && !current.data.equals(e2)) {
+        current = current.next;
+    }
+
+    // If e2 is not found, exit
+    if (current == null) {
+        return;
+    }
+
+    // Step 3: At this point, 'start' is the node with e1 and 'current' is the node with e2
+    // Remove all nodes between start and current
+    Node<T> temp = start.next;
+    while (temp != current) {
+        Node<T> nextNode = temp.next;
+        // Disconnect the node
+        temp.prev = temp.next = null;
+        temp = nextNode;
+    }
+
+    // Step 4: Link e1's node to e2's node to bypass the removed nodes
+    start.next = current;
+    current.prev = start;
+
+    // Step 5: Move current pointer to head if the removal was successful
+    this.current = head;
+}
+}
     }
 }
